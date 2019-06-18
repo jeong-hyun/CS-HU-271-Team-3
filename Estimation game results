@@ -1,0 +1,18 @@
+===========================================HARDER
+create framework to manage inputs/operations (5)
+  exception handling (2.5)
+Math operation interface (unary) 2
+Math operation interface (binary) 2
+unary operators
+  factorial 1
+  square root 1
+  log 1
+Command line/text based interface 3
+binary opertors
+  addition 1
+  subtraction 1
+  multiplication 1
+  division 1
+  exponentiation 1
+Set up environment (individually) 2
+===========================================EASIER
