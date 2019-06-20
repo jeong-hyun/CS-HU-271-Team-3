@@ -1,12 +1,12 @@
 /**
  * For if the methods of some class are called in the wrong order.
- * cannot [inputType] at this point in time, [reason]
+ * MESSAGE: cannot [inputType] at time, [reason]
  * 
  * @author Samuel Lieberman
  *
  */
-public class InputOrderException extends Exception {
+public class InputOrderException extends RuntimeException {
 	public InputOrderException(String inputType, String reason) {
-		super("cannot " + inputType + " at this point in time, " + reason);
+		super("cannot " + inputType + " at this time, " + reason);
 	}
 }
