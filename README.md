@@ -3,3 +3,4 @@ Group Members:
 	Jeong-Hyun Boo
 	Akira Enderle
 	Kyle Epperson
+	Samuel Lieberman
