@@ -7,7 +7,7 @@
 public class OperatorList {
 	/**
 	 * add instances of any new BinaryOperators to this class
-	 * Example: new Add(),
+	 * Example: new Addition(),
 	 */
 	private static final BinaryOperator[] ALL_BINARY_OPERATORS = new BinaryOperator[] {
 			
