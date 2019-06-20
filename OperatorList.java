@@ -14,7 +14,7 @@ public class OperatorList {
 	};
 	/**
 	 * add instances of any new UnaryOperators to this class
-	 * Example: new Sqrt(),
+	 * Example: new Sin(),
 	 */
 	private static final BinaryOperator[] ALL_UNARY_OPERATORS = new BinaryOperator[] {
 			
@@ -54,9 +54,9 @@ public class OperatorList {
 		return (BinaryOperator) getOperator(OperatorType.BINARY, SymbolLocation.BETWEEN, symbol);
 	}
 	/**
-	 * Returns a BinaryOperator matching the inputed symbol. EX "sin" returns an instance of the Sin class
+	 * Returns a UnaryOperator matching the inputed symbol. EX "sin" returns an instance of the Sin class
 	 * 
-	 * @param symbol the between symbol for the operator
+	 * @param symbol the before symbol for the operator
 	 * @return the first match
 	 * @throws OperationNotFoundException If no matches are found.
 	 */
