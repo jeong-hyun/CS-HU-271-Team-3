@@ -6,7 +6,15 @@
  *
  */
 public class OperationNotFoundException extends Exception {
-	public OperationNotFoundException(String operator) {
+	private final String OPERATOR;
+	
+ 	public OperationNotFoundException(String operator) {
 		super("operator " + operator + " not found.");
+		
+		OPERATOR = operator;
 	}
+ 	
+ 	public String getOperator() {
+ 		return OPERATOR;
+ 	}
 }

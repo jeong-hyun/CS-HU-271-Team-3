@@ -48,23 +48,21 @@ public class OperatorList {
 	 * Returns a BinaryOperator matching the inputed symbol. EX "+" returns an instance of Addition.
 	 * 
 	 * @param symbol the between symbol for the operator
-	 * @return the first match
-	 * @throws OperationNotFoundException If no matches are found.
+	 * @return the first match or null if no matches are found.
 	 */
-	public static BinaryOperator getBinaryOperator(String symbol) throws OperationNotFoundException {
+	public static BinaryOperator getBinaryOperator(String symbol) {
 		return (BinaryOperator) getOperator(OperatorType.BINARY, SymbolLocation.BETWEEN, symbol);
 	}
 	/**
 	 * Returns a UnaryOperator matching the inputed symbol. EX "sin" returns an instance of the Sin class
 	 * 
 	 * @param symbol the before symbol for the operator
-	 * @return the first match
-	 * @throws OperationNotFoundException If no matches are found.
+	 * @return the first match or null if no matches are found.
 	 */
-	public static UnaryOperator getUnaryOperator(String symbol) throws OperationNotFoundException {
+	public static UnaryOperator getUnaryOperator(String symbol) {
 		return (UnaryOperator) getOperator(OperatorType.BINARY, SymbolLocation.BEFORE, symbol);
 	}
-	private static Operator getOperator(OperatorType operatorType, SymbolLocation symbolLocation, String symbol) throws OperationNotFoundException {
+	private static Operator getOperator(OperatorType operatorType, SymbolLocation symbolLocation, String symbol) {
 		Operator[] relevantOperators;
 		switch (operatorType) {
 		case BINARY:
@@ -105,7 +103,7 @@ public class OperatorList {
 		}
 		
 		if (!matchFound) {
-			throw new OperationNotFoundException(symbol);
+			return null;
 		}
 		
 		return match;
