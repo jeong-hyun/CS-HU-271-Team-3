@@ -2,3 +2,4 @@ Estimation game results
 *.class
 .classpath
 .project
+.DS_Store
