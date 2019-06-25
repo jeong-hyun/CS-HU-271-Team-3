@@ -10,7 +10,7 @@ import java.util.Math;
 public class Exponentiation extends BinaryOperator {
 
 	@Override
-	public double evaluate(double input1, double input2) throws ArithmeticException {
+	public double evaluate(double input1, double input2) {
 	    return Math.pow(input1, input2);
 	}
 

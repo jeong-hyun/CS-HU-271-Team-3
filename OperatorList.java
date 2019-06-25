@@ -10,8 +10,9 @@ public class OperatorList {
 	 * Example: new Addition(),
 	 */
 	private static final BinaryOperator[] ALL_BINARY_OPERATORS = new BinaryOperator[] {
-			new Addition(),
-			new Subtraction(),
+		new Addition(),
+		new Subtraction(),
+		new Exponentiation(),
 	};
 	/**
 	 * add instances of any new UnaryOperators to this class
