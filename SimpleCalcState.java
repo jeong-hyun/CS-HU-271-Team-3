@@ -70,20 +70,26 @@ public class SimpleCalcState implements CalculatorState{
 	
 	@Override
 	public void pushOperator(String operator) throws InputOrderException, OperationNotFoundException {
-		{//UNARY OPERATOR
+		boolean operatorFound = false;
+		
+		if (!operatorFound) {//UNARY OPERATOR
 			UnaryOperator unaryResult = OperatorList.getUnaryOperator(operator);
 			if (unaryResult != null) {
 				operatorStack.push(new OperatorCall(unaryResult));
+				operatorFound = true;
 			}
 		}//END UNARY
-		{//BINARY OPERATOR
+		if (!operatorFound) {//BINARY OPERATOR
 			BinaryOperator binaryResult = OperatorList.getBinaryOperator(operator);
 			if (binaryResult != null) {
 				operatorStack.push(new OperatorCall(binaryResult, topValue));
+				operatorFound = true;
 			}
-		}
+		}//END BINARY OPERATOR
 		
-		throw new OperationNotFoundException(operator);
+		if (!operatorFound) {
+			throw new OperationNotFoundException(operator);
+		}
 	}
 	
 	@Override
