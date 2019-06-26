@@ -39,6 +39,8 @@ public class TextUI
 					e.printStackTrace();
 				}
 			}
+			
+			System.out.println(state.getValue());
 		}
 		scan.close();
 	}

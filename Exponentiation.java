@@ -1,5 +1,3 @@
-import java.util.Math;
-
 /*
  * Performs the exponentiation arithmetic for calculator.
  * 
