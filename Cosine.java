@@ -14,5 +14,10 @@ public class Cosine extends UnaryOperator
 		return Math.cos(input1);
 	}
 
+	@Override
+	public String beforeSymbol() 
+	{
+		return "cos";
+	}
 }
 

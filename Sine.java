@@ -13,6 +13,11 @@ public class Sine extends UnaryOperator
 		// TODO Auto-generated method stub
 		return Math.sin(input1);
 	}
+	@Override
+	public String beforeSymbol() 
+	{
+		return "sin";
+	}
 
 }
 
