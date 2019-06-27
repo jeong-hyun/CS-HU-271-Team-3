@@ -13,6 +13,7 @@ public class OperatorList {
 		new Addition(),
 		new Subtraction(),
 		new Exponentiation(),
+		new Multiplication(),
 	};
 	/**
 	 * add instances of any new UnaryOperators to this class
