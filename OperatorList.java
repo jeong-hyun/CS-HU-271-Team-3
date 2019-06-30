@@ -19,8 +19,9 @@ public class OperatorList {
 	 * add instances of any new UnaryOperators to this class
 	 * Example: new Sin(),
 	 */
-	private static final BinaryOperator[] ALL_UNARY_OPERATORS = new BinaryOperator[] {
-			
+	private static final UnaryOperator[] ALL_UNARY_OPERATORS = new UnaryOperator[] {
+		new Sine(),
+		new Cosine(),
 	};
 	
 	/**
@@ -62,7 +63,7 @@ public class OperatorList {
 	 * @return the first match or null if no matches are found.
 	 */
 	public static UnaryOperator getUnaryOperator(String symbol) {
-		return (UnaryOperator) getOperator(OperatorType.BINARY, SymbolLocation.BEFORE, symbol);
+		return (UnaryOperator) getOperator(OperatorType.UNARY, SymbolLocation.BEFORE, symbol);
 	}
 	private static Operator getOperator(OperatorType operatorType, SymbolLocation symbolLocation, String symbol) {
 		Operator[] relevantOperators;
