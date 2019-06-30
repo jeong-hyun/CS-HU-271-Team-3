@@ -99,8 +99,6 @@ public class OperatorList {
 				}
 				break;
 			}
-			
-			i++;
 		}
 		
 		if (!matchFound) {
