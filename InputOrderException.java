@@ -1,6 +1,6 @@
 /**
  * For if the methods of some class are called in the wrong order.
- * MESSAGE: cannot [inputType] at time, [reason]
+ * MESSAGE: cannot [inputType] at this time, [reason]
  * 
  * @author Samuel Lieberman
  *

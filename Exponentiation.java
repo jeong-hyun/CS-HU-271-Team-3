@@ -6,6 +6,10 @@
  */
 
 public class Exponentiation extends BinaryOperator {
+	@Override
+	public OrderOfOperations stage() {
+		return OrderOfOperations.EXPONENTIATION;
+	}
 
 	@Override
 	public double evaluate(double input1, double input2) {

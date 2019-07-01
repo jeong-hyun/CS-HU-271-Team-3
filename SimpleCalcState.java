@@ -11,15 +11,25 @@ import java.util.Stack;
 public class SimpleCalcState implements CalculatorState{
 	private Stack<OperatorCall> operatorStack;
 	
+	private int parenLayers;
 	private double topValue;
 	
 	public SimpleCalcState() {
 		initStack();
+		operatorStack.push(new OperatorCall(0, 0));
 	}
 	
 	private void initStack() {
 		operatorStack = new Stack<OperatorCall>();
-		topValue = Double.NaN;
+		parenLayers = 0;
+		topValue = 0;
+	}
+	
+	private void evaluate() {
+		Popper evaluator = new Popper(operatorStack);
+		evaluator.solve();
+		initStack();
+		pushNumber("" + evaluator.getSolution());
 	}
 	
 	@Override
@@ -31,41 +41,45 @@ public class SimpleCalcState implements CalculatorState{
 	public void pushNumber(String number) throws InputOrderException, NumberFormatException {
 		double input = Double.parseDouble(number);
 		
-		if (operatorStack.isEmpty()) {
-			topValue = input;
-		}else {
-			OperatorCall topCall = operatorStack.peek();
-			switch(topCall.getCallType()) {
-			case BINARY_OPERATOR:
-			case UNARY_OPERATOR:
-				//evaluates as far as it can
-				pushNumber(input);
-				break;
-			case NUMBER:
-				//overwrites the previous number
-				initStack();
-				topValue = input;
-				break;
-			default:
-				throw new InputOrderException("push number", "unknown operator type on stack");
-			}
-		}
-	}
-	private void pushNumber(double input) {
-		if (operatorStack.isEmpty()) {
-			topValue = input;
-		}else {
+		if (!operatorStack.isEmpty()) {
 			OperatorCall topCall = operatorStack.peek();
 			
-			topCall.addInput(input);
-			operatorStack.pop();
-			pushNumber(topCall.getValue());
+			if (topCall.getCallType().equals(OperatorType.NUMBER)) {
+				//overwrites the previous number
+				operatorStack.pop();
+			}
 		}
+		
+		operatorStack.push(new OperatorCall(parenLayers, input));
+		topValue = input;
 	}
 	
 	@Override
 	public void pushControl(String control) throws InputOrderException, UnsupportedOperationException {
-		throw new UnsupportedOperationException("parentheses are not supported");
+		switch(control) {
+		case "(":
+			parenLayers++;
+			break;
+		case ")":
+			if (parenLayers <= 0) {
+				throw new InputOrderException("add an end parenthese", "there is no beginning parenthese to match it");
+			}
+			
+			parenLayers--;
+			break;
+		case "=":
+			if (parenLayers != 0) {
+				throw new InputOrderException("evaluate", "unmatched parenthese");
+			}
+			if (!operatorStack.peek().getCallType().equals(OperatorType.NUMBER)) {
+				throw new InputOrderException("evaluate", "no number at the end");
+			}
+			
+			evaluate();
+			break;
+		default:
+			throw new RuntimeException("control character " + control + " not recognized, only ( and ) are valid control characters");
+		}
 	}
 	
 	@Override
@@ -75,14 +89,24 @@ public class SimpleCalcState implements CalculatorState{
 		if (!operatorFound) {//UNARY OPERATOR
 			UnaryOperator unaryResult = OperatorList.getUnaryOperator(operator);
 			if (unaryResult != null) {
-				operatorStack.push(new OperatorCall(unaryResult));
+				if (!operatorStack.isEmpty()) {
+					OperatorCall topCall = operatorStack.peek();
+					
+					if (topCall.getCallType().equals(OperatorType.NUMBER)) {
+						//overwrites the previous number
+						operatorStack.pop();
+					}
+				}
+				
+				operatorStack.push(new OperatorCall(parenLayers, unaryResult));
+				pushControl("(");
 				operatorFound = true;
 			}
 		}//END UNARY
 		if (!operatorFound) {//BINARY OPERATOR
 			BinaryOperator binaryResult = OperatorList.getBinaryOperator(operator);
 			if (binaryResult != null) {
-				operatorStack.push(new OperatorCall(binaryResult, topValue));
+				operatorStack.push(new OperatorCall(parenLayers, binaryResult));
 				operatorFound = true;
 			}
 		}//END BINARY OPERATOR

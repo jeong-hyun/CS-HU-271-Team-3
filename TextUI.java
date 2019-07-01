@@ -10,9 +10,6 @@ import java.util.Scanner;
 public class TextUI
 
 {
-	private static String num;
-	private static String oprtr;
-
 	public static void main(String args[]) 
 	{
 		CalculatorState state = new SimpleCalcState();
@@ -22,26 +19,32 @@ public class TextUI
 		{
 			if (scan.hasNextDouble()) 
 			{
-				num = scan.next();
-				state.pushNumber(num);
+				state.pushNumber(scan.next());
 			} else 
 			{
-				try 
-				{
-					state.pushOperator(scan.next());
-				} catch (InputOrderException e) 
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (OperationNotFoundException e) 
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				String next = scan.next();
+				
+				if (next.matches("[()=]")) {
+					state.pushControl(next);
+				}else {
+					try 
+					{
+						state.pushOperator(next);
+					} catch (InputOrderException e) 
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (OperationNotFoundException e) 
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 			
 			System.out.println(state.getValue());
 		}
+		
 		scan.close();
 	}
 

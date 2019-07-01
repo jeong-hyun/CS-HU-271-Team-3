@@ -6,7 +6,11 @@
  */
 
 public class Addition extends BinaryOperator {
-
+	@Override
+	public OrderOfOperations stage() {
+		return OrderOfOperations.ADDITION_AND_SUBTRACTION;
+	}
+	
 	@Override
 	public double evaluate(double input1, double input2) throws ArithmeticException {
 		// TODO Auto-generated method stub
