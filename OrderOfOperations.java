@@ -16,6 +16,7 @@ public enum OrderOfOperations{
 	 * use these like this:
 	 * OrderOfOperations.MULTIPLICATION_AND_ADDITION
 	 */
+	NUMBER_STAGE(-2, Direction.NONE),
 	SINGLE_INPUT(-1, Direction.NONE),
 	OTHER_EARLY(0, Direction.LEFT_TO_RIGHT),
 	EXPONENTIATION(1, Direction.RIGHT_TO_LEFT),
@@ -79,7 +80,8 @@ public enum OrderOfOperations{
 		return ORDER_COMPARATOR;
 	}
 	/**
-	 * A private static class for comparing these enums.  Works based on the stage double in the OrderOfOperatons
+	 * A private static class for comparing these enums.  Works based on the stage double in the OrderOfOperatons.
+	 * Lower stage values come first.
 	 */
 	private static class OrderComparator implements Comparator<OrderOfOperations> {
 		@Override

@@ -1,5 +1,8 @@
+import java.util.Comparator;
 
-public class OperatorCall {
+public class OperatorCall implements Comparable<OperatorCall>{
+	private final int PAREN_LAYERS;
+	
 	private final OperatorType CALL_TYPE;
 	
 	private final BinaryOperator BINARY_OPERATOR;
@@ -13,18 +16,18 @@ public class OperatorCall {
 	private double value;
 	private boolean hasValue;
 	
-	public OperatorCall(BinaryOperator operator, double firstInput) {
-		this(OperatorType.BINARY_OPERATOR, operator, null, Double.NaN);
+	public OperatorCall(int parenLayers, BinaryOperator operator) {
+		this(parenLayers, OperatorType.BINARY_OPERATOR, operator, null, Double.NaN);
+	}
+	public OperatorCall(int parenLayers, UnaryOperator operator) {
+		this(parenLayers, OperatorType.UNARY_OPERATOR, null, operator, Double.NaN);
+	}
+	public OperatorCall(int parenLayers, double number) {
+		this(parenLayers, OperatorType.NUMBER, null, null, number);
+	}
+	private OperatorCall(int parenLayers, OperatorType operatorType, BinaryOperator binaryOperator, UnaryOperator unaryOperator, double number) {
+		PAREN_LAYERS = parenLayers;
 		
-		addInput(firstInput);
-	}
-	public OperatorCall(UnaryOperator operator) {
-		this(OperatorType.UNARY_OPERATOR, null, operator, Double.NaN);
-	}
-	public OperatorCall(double number) {
-		this(OperatorType.NUMBER, null, null, number);
-	}
-	private OperatorCall(OperatorType operatorType, BinaryOperator binaryOperator, UnaryOperator unaryOperator, double number) {
 		CALL_TYPE = operatorType;
 		BINARY_OPERATOR = binaryOperator;
 		UNARY_OPERATOR = unaryOperator;
@@ -42,6 +45,45 @@ public class OperatorCall {
 			break;
 		}
 		initValue();
+	}
+	
+	public int getParenLayers() {
+		return PAREN_LAYERS;
+	}
+	public OrderOfOperations getOrder() {
+		switch (CALL_TYPE) {
+		case BINARY_OPERATOR:
+			return BINARY_OPERATOR.stage();
+		case UNARY_OPERATOR:
+			return UNARY_OPERATOR.stage();
+		case NUMBER:
+			return OrderOfOperations.NUMBER_STAGE;
+		default:
+			throw new RuntimeException("call type " + CALL_TYPE + " not recognized");
+		}
+	}
+	@Override//IMPORTANT NOTE: operators should be compareTo'd to operators to the right of them
+	public int compareTo(OperatorCall otherOperator) {
+		int layerCompare = Integer.compare(PAREN_LAYERS, otherOperator.PAREN_LAYERS);
+		if (layerCompare != 0) {
+			//more paren layers means this comes first, the opposite order of integers normally
+			return -layerCompare;
+		}
+		
+		OrderOfOperations thisStage = this.getOrder();
+		OrderOfOperations theirStage = otherOperator.getOrder();
+		Comparator<OrderOfOperations> stageComparator = OrderOfOperations.getComp();
+		int stageCompare = stageComparator.compare(thisStage, theirStage);
+		if (stageCompare != 0) {
+			return stageCompare;
+		}
+		
+		if (thisStage.getDirectionOfExecution().equals(OrderOfOperations.Direction.RIGHT_TO_LEFT)) {
+			//this operation is left and later than right
+			return 1;
+		}else {
+			return -1;
+		}
 	}
 	
 	public OperatorType getCallType() {
@@ -63,7 +105,7 @@ public class OperatorCall {
 		return UNARY_OPERATOR;
 	}
 	public double getNumber() {
-		if (CALL_TYPE != OperatorType.UNARY_OPERATOR) {
+		if (!CALL_TYPE.equals(OperatorType.NUMBER)) {
 			throw new RuntimeException("this is not a number");
 		}
 		
