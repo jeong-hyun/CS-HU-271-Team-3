@@ -14,9 +14,22 @@ public class SimpleCalcState implements CalculatorState{
 	private int parenLayers;
 	private double topValue;
 	
+	private String digits;
+	private int decimalFromTheLeft;
+	private boolean hasDecimal;
+	private boolean negative;
+	
 	public SimpleCalcState() {
+		initDigits();
 		initStack();
 		operatorStack.push(new OperatorCall(0, 0));
+	}
+	
+	private void initDigits() {
+		digits = "";
+		decimalFromTheLeft = -1;
+		hasDecimal = false;
+		negative = false;
 	}
 	
 	private void initStack() {
@@ -34,12 +47,42 @@ public class SimpleCalcState implements CalculatorState{
 	
 	@Override
 	public void pushDigit(String digit) throws InputOrderException, UnsupportedOperationException {
-		throw new UnsupportedOperationException("entering numbers one digit at a time is not supported");
+		if (digit.matches("[0-9]")) {
+			digits += digit;
+		}else if (digit.equals("-")) {
+			negative = !negative;
+		}else if (digit.equals(".")) {
+			if (!hasDecimal) {
+				throw new InputOrderException("add decimal point", "can't have two decimal points in the same number");
+			}
+			
+			decimalFromTheLeft = digits.length();
+			hasDecimal = true;
+		}
+		
+		String number = "";
+		
+		if (negative) {
+			number += "-";
+		}
+		
+		if (hasDecimal) {
+			number += digits.substring(0, decimalFromTheLeft);
+			number += ".";
+			number += digits.substring(decimalFromTheLeft);
+		}else {
+			number += digits;
+		}
+		
+		pushNumber(number);
 	}
 	
 	@Override
 	public void pushNumber(String number) throws InputOrderException, NumberFormatException {
 		double input = Double.parseDouble(number);
+		
+		//overwrites currently entered digits
+		initDigits();
 		
 		if (!operatorStack.isEmpty()) {
 			OperatorCall topCall = operatorStack.peek();
@@ -84,6 +127,9 @@ public class SimpleCalcState implements CalculatorState{
 	
 	@Override
 	public void pushOperator(String operator) throws InputOrderException, OperationNotFoundException {
+		//overwrites currently parsed digits
+		initDigits();
+		
 		boolean operatorFound = false;
 		
 		if (!operatorFound) {//UNARY OPERATOR
