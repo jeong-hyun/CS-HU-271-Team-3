@@ -12,7 +12,6 @@ public class SimpleCalcState implements CalculatorState{
 	private Stack<OperatorCall> operatorStack;
 	
 	private int parenLayers;
-	private double topValue;
 	
 	private String digits;
 	private int decimalFromTheLeft;
@@ -35,7 +34,6 @@ public class SimpleCalcState implements CalculatorState{
 	private void initStack() {
 		operatorStack = new Stack<OperatorCall>();
 		parenLayers = 0;
-		topValue = 0;
 	}
 	
 	private void evaluate() {
@@ -94,7 +92,6 @@ public class SimpleCalcState implements CalculatorState{
 		}
 		
 		operatorStack.push(new OperatorCall(parenLayers, input));
-		topValue = input;
 	}
 	
 	@Override
@@ -123,6 +120,11 @@ public class SimpleCalcState implements CalculatorState{
 			
 			evaluate();
 			break;
+		case "C":
+			initDigits();
+			if (!operatorStack.isEmpty()) {
+				operatorStack.pop();
+			}
 		default:
 			throw new RuntimeException("control character " + control + " not recognized, only ( and ) are valid control characters");
 		}
@@ -167,11 +169,65 @@ public class SimpleCalcState implements CalculatorState{
 	
 	@Override
 	public double getValue() throws UnsupportedOperationException {
-		return topValue;
+		if (operatorStack.isEmpty()) {
+			return 0;
+		}
+		
+		//searches for the first number on the stack
+		int i = operatorStack.size()-1;
+		while (i >= 0 && !operatorStack.get(i).getCallType().equals(OperatorType.NUMBER)) {
+			i--;
+		}
+		//if it goes all the way down the stack without finding anything.
+		if (i < 0) {
+			return 0;
+		}
+		//return the value of the number that was found.
+		return operatorStack.get(i).getNumber();
 	}
 	
 	@Override
 	public String getExpression() throws UnsupportedOperationException {
-		throw new UnsupportedOperationException("expressions not supported");
+		String expression = "";
+		
+		for (int i = 0; i < operatorStack.size(); i++) {
+			OperatorCall thisCall = operatorStack.get(i);
+			
+			if (i == 0) {
+				for (int j = 0; j < thisCall.getParenLayers(); j++) {
+					expression += "(";
+				}
+			}else {
+				expression += " ";
+				
+				OperatorCall lastCall = operatorStack.get(i-1);
+				
+				int newParens = thisCall.getParenLayers() - lastCall.getParenLayers();
+				
+				for (int j = 0; j < newParens; j++) {
+					expression += "(";
+				}
+			}
+			
+			expression += thisCall;
+			
+			if (i == operatorStack.size()-1) {
+				for (int j = 0; j < thisCall.getParenLayers() - parenLayers; j++) {
+					expression += ")";
+				}
+			}else {
+				OperatorCall nextCall = operatorStack.get(i+1);
+				
+				int lostParens = thisCall.getParenLayers() - nextCall.getParenLayers();
+				
+				for (int j = 0; j < lostParens; j++) {
+					expression += ")";
+				}
+				
+				expression += " ";
+			}
+		}
+		
+		return expression;
 	}
 }

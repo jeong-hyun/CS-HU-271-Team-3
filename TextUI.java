@@ -42,7 +42,7 @@ public class TextUI
 				}
 			}
 			
-			System.out.println(state.getValue());
+			System.out.println(state.getExpression());
 		}
 		
 		scan.close();
