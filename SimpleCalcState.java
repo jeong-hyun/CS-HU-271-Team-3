@@ -52,7 +52,7 @@ public class SimpleCalcState implements CalculatorState{
 		}else if (digit.equals("-")) {
 			negative = !negative;
 		}else if (digit.equals(".")) {
-			if (!hasDecimal) {
+			if (hasDecimal) {
 				throw new InputOrderException("add decimal point", "can't have two decimal points in the same number");
 			}
 			
@@ -66,7 +66,9 @@ public class SimpleCalcState implements CalculatorState{
 			number += "-";
 		}
 		
-		if (hasDecimal) {
+		if (digits.isEmpty()) {
+			number += "0";
+		}else if (hasDecimal) {
 			number += digits.substring(0, decimalFromTheLeft);
 			number += ".";
 			number += digits.substring(decimalFromTheLeft);
@@ -75,14 +77,12 @@ public class SimpleCalcState implements CalculatorState{
 		}
 		
 		pushNumber(number);
+		System.out.println("number: " + number);
 	}
 	
 	@Override
 	public void pushNumber(String number) throws InputOrderException, NumberFormatException {
 		double input = Double.parseDouble(number);
-		
-		//overwrites currently entered digits
-		initDigits();
 		
 		if (!operatorStack.isEmpty()) {
 			OperatorCall topCall = operatorStack.peek();
@@ -99,6 +99,9 @@ public class SimpleCalcState implements CalculatorState{
 	
 	@Override
 	public void pushControl(String control) throws InputOrderException, UnsupportedOperationException {
+		//overwrites currently parsed digits
+		initDigits();
+		
 		switch(control) {
 		case "(":
 			parenLayers++;
