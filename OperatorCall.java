@@ -168,4 +168,18 @@ public class OperatorCall implements Comparable<OperatorCall>{
 		
 		return value;
 	}
+	
+	@Override
+	public String toString() {
+		switch (CALL_TYPE) {
+		case BINARY_OPERATOR:
+			return BINARY_OPERATOR.betweenSymbol();
+		case NUMBER:
+			return ("" + NUMBER).replaceAll("()\\.0+$|(\\..+?)0+$", "$2");
+		case UNARY_OPERATOR:
+			return UNARY_OPERATOR.beforeSymbol();
+		default:
+			throw new RuntimeException("unknown OperatorType: " + CALL_TYPE);
+		}
+	}
 }
