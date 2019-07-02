@@ -75,7 +75,6 @@ public class SimpleCalcState implements CalculatorState{
 		}
 		
 		pushNumber(number);
-		System.out.println("number: " + number);
 	}
 	
 	@Override
@@ -123,8 +122,22 @@ public class SimpleCalcState implements CalculatorState{
 		case "C":
 			initDigits();
 			if (!operatorStack.isEmpty()) {
-				operatorStack.pop();
+				int topParenLayers = operatorStack.peek().getParenLayers();
+				if (topParenLayers == parenLayers) {
+					operatorStack.pop();
+				}else if (topParenLayers > parenLayers){
+					parenLayers++;
+				}else {
+					parenLayers--;
+				}
+			}else if (parenLayers > 0) {
+				parenLayers--;
 			}
+			break;
+		case "CE":
+			initDigits();
+			operatorStack = new Stack<OperatorCall>();
+			break;
 		default:
 			throw new RuntimeException("control character " + control + " not recognized, only ( and ) are valid control characters");
 		}
@@ -222,6 +235,12 @@ public class SimpleCalcState implements CalculatorState{
 			if (i == operatorStack.size()-1) {
 				for (int j = 0; j < thisCall.getParenLayers() - parenLayers; j++) {
 					expression += ")";
+				}
+				
+				if (!thisCall.getCallType().equals(OperatorType.NUMBER)) {
+					for (int j = 0; j < parenLayers - thisCall.getParenLayers(); j++) {
+						expression += "(";
+					}
 				}
 			}else {
 				OperatorCall nextCall = operatorStack.get(i+1);
