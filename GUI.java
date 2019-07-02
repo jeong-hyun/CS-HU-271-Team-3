@@ -4,15 +4,18 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * @author Jeong-Hyun Boo
+ *
+ */
 public class GUI extends JFrame{
-
 	public GUI() 
 	{
 		super("Calculator");
 		
 		setSize(500, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		
 		
 		JPanel leftPanel = new JPanel();
@@ -22,8 +25,8 @@ public class GUI extends JFrame{
 		JPanel operationPanel = new JPanel();
 		JPanel controlPanel = new JPanel();
 		
-		JLabel exceptionLabel = new JLabel();
-		JLabel valueLabel = new JLabel();
+		JLabel exceptionLabel = new JLabel("exception");
+		JLabel valueLabel = new JLabel("value");
 		
 		getContentPane().add(leftPanel, BorderLayout.WEST);
 		getContentPane().add(rightPanel, BorderLayout.EAST);
@@ -33,17 +36,11 @@ public class GUI extends JFrame{
 		rightPanel.add(operationPanel, BorderLayout.CENTER);
 		rightPanel.add(controlPanel, BorderLayout.SOUTH);
 		
-		
-		revalidate();
-		
+		pack();
+		setVisible(true);
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
 		new GUI();
 	}
-	
-	
-
 }
