@@ -23,6 +23,7 @@ public class OperatorList {
 	private static final UnaryOperator[] ALL_UNARY_OPERATORS = new UnaryOperator[] {
 		new Sine(),
 		new Cosine(),
+		new Factorial(),
 	};
 	
 	/**
