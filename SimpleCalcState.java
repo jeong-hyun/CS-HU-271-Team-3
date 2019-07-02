@@ -198,7 +198,15 @@ public class SimpleCalcState implements CalculatorState{
 					expression += "(";
 				}
 			}else {
-				expression += " ";
+				if (
+						thisCall.getCallType().equals(OperatorType.BINARY_OPERATOR) &&
+						(
+								thisCall.getBinaryOperator() instanceof Addition ||
+								thisCall.getBinaryOperator() instanceof Subtraction
+						)
+					) {
+					expression += " ";
+				}
 				
 				OperatorCall lastCall = operatorStack.get(i-1);
 				
@@ -224,7 +232,15 @@ public class SimpleCalcState implements CalculatorState{
 					expression += ")";
 				}
 				
-				expression += " ";
+				if (
+						thisCall.getCallType().equals(OperatorType.BINARY_OPERATOR) &&
+						(
+								thisCall.getBinaryOperator() instanceof Addition ||
+								thisCall.getBinaryOperator() instanceof Subtraction
+						)
+					) {
+					expression += " ";
+				}
 			}
 		}
 		
