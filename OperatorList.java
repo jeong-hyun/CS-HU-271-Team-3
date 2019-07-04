@@ -24,6 +24,7 @@ public class OperatorList {
 		new Sine(),
 		new Cosine(),
 		new Factorial(),
+		new SquareRoot(),
 	};
 	
 	/**
