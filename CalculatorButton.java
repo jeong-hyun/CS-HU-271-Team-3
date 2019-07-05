@@ -7,12 +7,12 @@ import javax.swing.*;
  * @author Akira Enderle
  */
 public abstract class CalculatorButton extends JButton {
+	private static final Dimension BUTTON_SIZE = new Dimension(60, 40);
+	
 	private JLabel valueLabel;
 	private JLabel exceptionLabel;
 	private CalculatorState calcState;
 	private String valueToPush;
-	private String labelOnButton;
-
 	/**
 	 * Constructor: Creates a CalculatorButton
 	 * @param valueLabel This displays the standard output
@@ -28,6 +28,10 @@ public abstract class CalculatorButton extends JButton {
 		this.calcState = calcState;
 		this.valueToPush = valueToPush;
 		this.addActionListener(new clickListener() );
+		
+		setPreferredSize(BUTTON_SIZE);
+		setMaximumSize(BUTTON_SIZE);
+		setMinimumSize(BUTTON_SIZE);
 	}
 	/**
 	 * An internal class for the CalculatorButton's ActionListener
@@ -40,6 +44,7 @@ public abstract class CalculatorButton extends JButton {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				pushValue(valueToPush);
+				exceptionLabel.setText("");
 			} catch (Exception ex) {
 				exceptionLabel.setText(ex.getMessage() );
 			}
