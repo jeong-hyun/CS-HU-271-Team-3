@@ -100,11 +100,26 @@ public class SimpleCalcState implements CalculatorState{
 		
 		switch(control) {
 		case "(":
+			if (!operatorStack.isEmpty()) {
+				OperatorCall topCall = operatorStack.peek();
+				
+				if (topCall.getCallType().equals(OperatorType.NUMBER)) {
+					throw new InputOrderException("add a beginning parenthese", "can only add a beginning parenthese before a number");
+				}
+			}
 			parenLayers++;
 			break;
 		case ")":
 			if (parenLayers <= 0) {
 				throw new InputOrderException("add an end parenthese", "there is no beginning parenthese to match it");
+			}
+			
+			if (!operatorStack.isEmpty()) {
+				OperatorCall topCall = operatorStack.peek();
+				
+				if (!topCall.getCallType().equals(OperatorType.NUMBER)) {
+					throw new InputOrderException("add an end parenthese", "can only add an end parenthese after a number");
+				}
 			}
 			
 			parenLayers--;
@@ -134,12 +149,13 @@ public class SimpleCalcState implements CalculatorState{
 				parenLayers--;
 			}
 			break;
-		case "CE":
+		case "AC":
 			initDigits();
+			parenLayers = 0;
 			operatorStack = new Stack<OperatorCall>();
 			break;
 		default:
-			throw new RuntimeException("control character " + control + " not recognized, only ( and ) are valid control characters");
+			throw new RuntimeException("control character " + control + " not recognized, only \"=\", \"(\", \")\", \"C\", and \"AC\" are valid control characters");
 		}
 	}
 	
@@ -170,6 +186,16 @@ public class SimpleCalcState implements CalculatorState{
 		if (!operatorFound) {//BINARY OPERATOR
 			BinaryOperator binaryResult = OperatorList.getBinaryOperator(operator);
 			if (binaryResult != null) {
+				if (!operatorStack.isEmpty()) {
+					OperatorCall topCall = operatorStack.peek();
+					
+					if (!topCall.getCallType().equals(OperatorType.NUMBER)) {
+						throw new InputOrderException("add a binary operator", "there is no left value for it");
+					}
+				}else {
+					throw new InputOrderException("add a binary operator", "there is no left value for it");
+				}
+				
 				operatorStack.push(new OperatorCall(parenLayers, binaryResult));
 				operatorFound = true;
 			}
