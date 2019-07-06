@@ -114,7 +114,7 @@ public class GUI extends JFrame{
 		operationPanel.add(new NumberButton(valueLabel, exceptionLabel, calcState, "" + Math.PI, "\u03C0"));
 		operationPanel.add(new NumberButton(valueLabel, exceptionLabel, calcState, "" + Math.E, "e"));
 		operationPanel.add(new OperatorButton(valueLabel, exceptionLabel, calcState, "sqrt", "\u221A"));
-		operationPanel.add(new OperatorButton(valueLabel, exceptionLabel, calcState, "NA", "NA"));
+		operationPanel.add(new OperatorButton(valueLabel, exceptionLabel, calcState, "%", "%"));
 		operationPanel.add(new OperatorButton(valueLabel, exceptionLabel, calcState, "NA", "NA"));
 		
 		operationPanel.add(new OperatorButton(valueLabel, exceptionLabel, calcState, "*", "*"));

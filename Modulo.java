@@ -1,7 +1,7 @@
 /*
  * Performs the modulo operation for calculator.
  * Given two numbers, the first number will be divided by the second,
- * and the remainder of that division is returned.
+ * and the remainder of that division operation is returned.
  * 
  * @author Akira Enderle
  * 
